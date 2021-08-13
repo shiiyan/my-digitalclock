@@ -1,5 +1,5 @@
 package myDigitalClock
 
 interface TimeSource {
-    fun setObserver(observer: ClockObserver)
+    fun registerObserver(observer: ClockObserver)
 }

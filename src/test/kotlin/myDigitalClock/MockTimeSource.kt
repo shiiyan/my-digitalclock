@@ -1,13 +1,15 @@
 package myDigitalClock
 
-class MockTimeSource : TimeSource {
-    private lateinit var itsObserver: ClockObserver
+import java.util.Vector
 
-    override fun setObserver(observer: ClockObserver) {
-        itsObserver = observer
+class MockTimeSource : TimeSource {
+    private val itsObservers: Vector<ClockObserver> = Vector()
+
+    override fun registerObserver(observer: ClockObserver) {
+        itsObservers.add(observer)
     }
 
     fun setTime(hours: Int, minutes: Int, seconds: Int) {
-        itsObserver.update(hours, minutes, seconds)
+        itsObservers.forEach { it.update(hours, minutes, seconds) }
     }
 }

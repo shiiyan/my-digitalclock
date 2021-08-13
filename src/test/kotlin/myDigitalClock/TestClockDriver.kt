@@ -3,17 +3,34 @@ package myDigitalClock
 import junit.framework.TestCase
 
 class TestClockDriver(name: String) : TestCase(name) {
+    private lateinit var source: MockTimeSource
+    private lateinit var sink: MockTimeSink
+
+    override fun setUp() {
+        source = MockTimeSource()
+        sink = MockTimeSink()
+        source.registerObserver(sink)
+    }
+
     fun testTimeChange() {
-        val source = MockTimeSource()
-        val sink = MockTimeSink()
-        val driver = ClockDriver(source, sink)
+        source.registerObserver(sink)
         source.setTime(3, 4, 5)
-        assertEquals(3, sink.getHours())
-        assertEquals(4, sink.getMinutes())
-        assertEquals(5, sink.getSeconds())
+        assertSinkEquals(sink, 3, 4, 5)
         source.setTime(7, 8, 9)
-        assertEquals(7, sink.getHours())
-        assertEquals(8, sink.getMinutes())
-        assertEquals(9, sink.getSeconds())
+        assertSinkEquals(sink, 7, 8, 9)
+    }
+
+    fun testMultipleSinks() {
+        val sink2 = MockTimeSink()
+        source.registerObserver(sink2)
+        source.setTime(12, 13, 14)
+        assertSinkEquals(sink, 12, 13, 14)
+        assertSinkEquals(sink2, 12, 13, 14)
+    }
+
+    private fun assertSinkEquals(sink: MockTimeSink, hours: Int, minutes: Int, seconds: Int) {
+        assertEquals(hours, sink.getHours())
+        assertEquals(minutes, sink.getMinutes())
+        assertEquals(seconds, sink.getSeconds())
     }
 }
