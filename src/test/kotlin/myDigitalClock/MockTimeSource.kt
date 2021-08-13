@@ -1,13 +1,13 @@
 package myDigitalClock
 
 class MockTimeSource : TimeSource {
-    private lateinit var itsDriver: ClockDriver
+    private lateinit var itsObserver: ClockObserver
 
-    override fun setDriver(driver: ClockDriver) {
-        itsDriver = driver
+    override fun setObserver(observer: ClockObserver) {
+        itsObserver = observer
     }
 
     fun setTime(hours: Int, minutes: Int, seconds: Int) {
-        itsDriver.update(hours, minutes, seconds)
+        itsObserver.update(hours, minutes, seconds)
     }
 }

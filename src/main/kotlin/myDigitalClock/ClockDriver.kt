@@ -1,13 +1,13 @@
 package myDigitalClock
 
-class ClockDriver(source: TimeSource, sink: TimeSink) {
+class ClockDriver(source: TimeSource, sink: TimeSink) : ClockObserver {
     private val itsSink: TimeSink = sink
 
     init {
-        source.setDriver(this)
+        source.setObserver(this)
     }
 
-    fun update(hours: Int, minutes: Int, seconds: Int) {
+    override fun update(hours: Int, minutes: Int, seconds: Int) {
         itsSink.setTime(hours, minutes, seconds)
     }
 }
