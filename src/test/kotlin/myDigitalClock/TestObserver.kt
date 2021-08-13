@@ -2,13 +2,13 @@ package myDigitalClock
 
 import junit.framework.TestCase
 
-class TestClockDriver(name: String) : TestCase(name) {
+class TestObserver(name: String) : TestCase(name) {
     private lateinit var source: MockTimeSource
     private lateinit var sink: MockTimeSink
 
     override fun setUp() {
         source = MockTimeSource()
-        sink = MockTimeSink()
+        sink = MockTimeSink(itsSource = source)
         source.registerObserver(sink)
     }
 
@@ -21,7 +21,7 @@ class TestClockDriver(name: String) : TestCase(name) {
     }
 
     fun testMultipleSinks() {
-        val sink2 = MockTimeSink()
+        val sink2 = MockTimeSink(itsSource = source)
         source.registerObserver(sink2)
         source.setTime(12, 13, 14)
         assertSinkEquals(sink, 12, 13, 14)

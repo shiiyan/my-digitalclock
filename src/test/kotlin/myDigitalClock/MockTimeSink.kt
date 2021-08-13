@@ -3,12 +3,13 @@ package myDigitalClock
 class MockTimeSink(
     private var itsHours: Int = 0,
     private var itsMinutes: Int = 0,
-    private var itsSeconds: Int = 0
-) : ClockObserver {
-    override fun update(hours: Int, minutes: Int, seconds: Int) {
-        itsHours = hours
-        itsMinutes = minutes
-        itsSeconds = seconds
+    private var itsSeconds: Int = 0,
+    private val itsSource: TimeSource
+) : Observer {
+    override fun update() {
+        itsHours = itsSource.getHours()
+        itsMinutes = itsSource.getMinutes()
+        itsSeconds = itsSource.getSeconds()
     }
 
     fun getHours(): Int = itsHours
